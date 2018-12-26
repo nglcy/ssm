@@ -1,0 +1,96 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="mapper.ProviderMapper">
+	
+	<sql id="baseSql">
+		 id,pname,pinfo,contacter,phone,address
+	</sql>
+	
+	<resultMap type="Provider" id="resultMap">
+		<id column="ID" property="id"/>
+		<result column="pname" property="pname"/>
+		<result column="pinfo" property="pinfo"/>
+		<result column="contacter" property="contacter"/>
+		<result column="phone" property="phone"/>
+		<result column="address" property="address"/>
+	
+	</resultMap>
+	
+	<insert id="insert" parameterType="Provider">
+		insert into provider
+			(pname,pinfo,contacter,phone,address)
+		values
+			(#{pname},#{pinfo},#{contacter},#{phone},#{address})
+	</insert>
+
+	<update id="update" parameterType="Provider">
+		update  provider
+		<set>
+			<if test="pname !=null and pname !=''">
+				pname = #{pname},
+			</if>
+			<if test="pinfo !=null and pinfo !='' ">
+				pinfo = #{pinfo},
+			</if>
+			<if test="contacter !=null and contacter !=''">
+				contacter = #{contacter},
+			</if>
+			<if test="phone !=null and phone !=''">
+				phone =#{phone},
+			</if>
+		</set>
+			where id = #{id}
+
+	</update>
+
+	<delete id="delete" parameterType="Provider" >
+		delete from provider where
+		<if test="id != null">
+		 	id = #{id}
+		</if>
+		<if test="id == null and pname !=null and pname !=''">
+			pname=#{pname}
+		</if>
+	</delete>
+
+	<select id="selectById" parameterType="Provider" resultMap="resultMap">
+		select 
+		<include refid="baseSql"></include>
+		from provider where id = #{id}
+	</select>
+	
+	<select id="selectByName" parameterType="Provider" resultMap="resultMap">
+		select 
+		<include refid="baseSql"></include>
+		 from provider where pname = #{pname}
+	</select>
+	
+	
+
+	<select id="selectAll" resultMap="resultMap">
+		select 
+		<include refid="baseSql"></include>
+		from provider
+	</select>
+
+	<select id="selectCount">
+		select count(*) from provider
+	</select>
+	
+	<select id="selectByPage" resultMap="resultMap" parameterType="Page">
+		select 
+			<include refid="baseSql"></include>
+		from provider limit #{firstIndex},#{maxResults}
+	</select>
+	<select id="selectLike" resultMap="resultMap" parameterType="Provider">
+		
+		select 
+			<include refid="baseSql"></include>
+		from provider 
+		<if test="pname !=null and pname != ''">
+			where pname like #{pname}
+		</if>
+	</select>
+	
+	
+</mapper>

@@ -1,0 +1,173 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="mapper.BillMapper">
+
+	<sql id="baseSql" >
+		id, gname,num,price,paystatus,pname, ginfo,bdate,username,trading_unit
+	</sql>
+	
+	<resultMap type="Bill" id="resultMap">
+		<id column="ID" property="id"/>
+		<result column="gname" property="gname"/>
+		<result column="num" property="num"/>
+		<result column="price" property="price"/>
+		<result column="paystatus" property="paystatus"/>
+		<result column="pname" property="pname"/>
+		<result column="ginfo" property="ginfo"/>
+		<result column="bdate" property="bdate"/>
+		<result column="username" property="username"/>
+		<result column="trading_unit" property="trading_unit"/>
+	</resultMap>
+	
+	<insert id="insert" parameterType="Bill">
+		insert into bill
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="gname !=null and gname !=''">
+				gname,
+			</if>
+			<if test="num !=null and num !=''">
+				num,
+			</if>
+			<if test="price !=null ">
+				price,
+			</if>
+			<if test="paystatus !=null">
+				paystatus,
+			</if>
+			<if test="pname !=null and pname !=''">
+				pname,
+			</if>
+			<if test="ginfo !=null and ginfo !=''">
+				ginfo,
+			</if>
+			<if test="bdate !=null and bdate !=''">
+				bdate,
+			</if>
+			<if test="username !=null and username !=''">
+				username,
+			</if>
+			
+			<if test="trading_unit !=null and trading_unit !=''">
+				trading_unit
+			</if>
+		</trim>
+		values
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="gname !=null and gname !=''">
+				#{gname},
+			</if>
+			<if test="num !=null and num !=''">
+				#{num},
+			</if>
+			<if test="price !=null ">
+				#{price},
+			</if>
+			<if test="paystatus !=null">
+				#{paystatus},
+			</if>
+			<if test="pname !=null and pname !=''">
+				#{pname},
+			</if>
+			<if test="ginfo !=null and ginfo !=''">
+				#{ginfo},
+			</if>
+			<if test="bdate !=null and bdate !=''">
+				#{bdate},
+			</if>
+			<if test="username != null and username !=''">
+				#{username},
+			</if>
+			<if test="trading_unit != null and trading_unit !=''">
+				#{trading_unit}
+			</if>
+		</trim>
+	</insert>
+
+	<update id="update" parameterType="Bill">
+		update  bill 
+		<set>
+			<if test="null != gname and '' != gname">
+				gname = #{gname},
+			</if>
+			<if test="num !=null and ''!=num">
+				num = #{num},
+			</if>
+			<if test="price !=null ">
+				price = #{price},
+			</if>
+			<if test="paystatus !=null ">
+				paystatus = #{paystatus},
+			</if>
+			<if test="pname !=null and pname !=''">
+				pname = #{pname},
+			</if>
+			<if test="ginfo !=null and ginfo !=''">
+				ginfo =#{ginfo},
+			</if>
+			<if test="bdate !=null and bdate!=''">
+				bdate = #{bdate},
+			</if>
+			<if test="username != null and username !=''">
+				username=#{username},
+			</if>
+			<if test="trading_unit != null and trading_unit !=''">
+				trading_unit=#{trading_unit}
+			</if>
+		</set>
+			where id = #{id}
+
+	</update>
+
+	<delete id="delete" parameterType="Bill">
+		delete from user where
+		<if test="id != null">
+		 	id = #{id}
+		</if>
+		<if test="id == null and gname !=null and gname !=''">
+			gname=#{gname}
+		</if>
+	</delete>
+
+	<select id="selectById" parameterType="Bill" resultMap="resultMap">
+		select 
+		<include refid="baseSql"></include>
+		from bill where id = #{id}
+	</select>
+	
+	<select id="selectByName" parameterType="Bill" resultMap="resultMap">
+		select 
+		<include refid="baseSql"></include>
+		 from bill where gname = #{gname}
+	</select>
+	
+	<select id="selectByUsername" parameterType="Bill" resultMap="resultMap">
+		select 
+		<include refid="baseSql"></include>
+		 from bill where username = #{username}
+	</select>
+
+	<select id="selectAll" resultMap="resultMap">
+		select 
+		<include refid="baseSql"></include>
+		from bill
+	</select>
+
+	<select id="selectCount">
+		select count(*) from bill
+	</select>
+	
+	<select id="selectByPage" resultMap="resultMap" parameterType="Page">
+		select 
+			<include refid="baseSql"></include>
+		from user limit #{firstIndex},#{maxResults}
+	</select>
+	<select id="selectLike" parameterType="Bill" resultMap="resultMap">
+		select 
+		<include refid="baseSql"></include>
+		from bill where gname like #{gname}
+		<if test=" paystatus != null">
+			and paystatus =#{paystatus}
+		</if>
+	</select>
+	
+</mapper>
